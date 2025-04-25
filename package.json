@@ -1,0 +1,35 @@
+{
+  "name": "webtotp",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@solidjs/router": "^0.15.3",
+    "bootstrap": "^5.3.3",
+    "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
+    "nanoid": "^5.1.5",
+    "otpauth": "^9.4.0",
+    "solid-js": "^1.9.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "@vitejs/plugin-legacy": "^6.0.2",
+    "postcss": "^8.5.3",
+    "postcss-preset-env": "^10.1.5",
+    "sass": "1.77.6",
+    "typescript": "~5.8.2",
+    "vite": "^6.3.3",
+    "vite-plugin-pwa": "^1.0.0",
+    "vite-plugin-solid": "^2.11.6",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "browserslist": [
+    "defaults"
+  ]
+}
