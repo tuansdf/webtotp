@@ -25,8 +25,11 @@ export default function IndexPage() {
 }
 
 const Item = (props: { secret: StoreSecret }) => {
+  const [copied, setCopied] = createSignal<boolean>(false);
   const [value, setValue] = createSignal("");
   const [time, setTime] = createSignal("");
+
+  let copiedDeb: ReturnType<typeof setTimeout> | null = null;
 
   const otpFn = createOtp(props.secret.secret || "");
 
@@ -57,9 +60,22 @@ const Item = (props: { secret: StoreSecret }) => {
           <div class="fs-1 fw-bold" style={{ "line-height": 1.2 }}>
             {value()}
           </div>
-          <button class="btn btn-danger btn-sm fw-semibold" onClick={() => deleteSecret(props.secret.id || "")}>
-            DEL
-          </button>
+          <div class="d-flex align-items-center gap-3">
+            <button class="btn btn-primary btn-sm fw-semibold" onClick={() => {
+              setCopied(true);
+              if (copiedDeb) {
+                clearTimeout(copiedDeb);
+              }
+              copiedDeb = setTimeout(() => {
+                setCopied(false);
+              }, 1000);
+            }}>
+              {copied() ? "Copied" : "Copy"}
+            </button>
+            <button class="btn btn-danger btn-sm fw-semibold" onClick={() => deleteSecret(props.secret.id || "")}>
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -79,7 +95,7 @@ export const createOtp = (secret: string) => {
         secret,
         issuer: "",
         issuerInLabel: false,
-        label: "",
+        label: ""
       });
     }
   } catch {
@@ -90,7 +106,7 @@ export const createOtp = (secret: string) => {
       secret,
       issuer: "",
       issuerInLabel: false,
-      label: "",
+      label: ""
     });
   }
   return {
@@ -100,6 +116,6 @@ export const createOtp = (secret: string) => {
     },
     period: totp.period,
     issuer: totp.issuer,
-    label: totp.label,
+    label: totp.label
   };
 };
