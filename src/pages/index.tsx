@@ -26,10 +26,12 @@ export default function IndexPage() {
 
 const Item = (props: { secret: StoreSecret }) => {
   const [copied, setCopied] = createSignal<boolean>(false);
+  const [deleted, setDeleted] = createSignal<boolean>(false);
   const [value, setValue] = createSignal("");
   const [time, setTime] = createSignal("");
 
   let copiedDeb: ReturnType<typeof setTimeout> | null = null;
+  let deletedDeb: ReturnType<typeof setTimeout> | null = null;
 
   const otpFn = createOtp(props.secret.secret || "");
 
@@ -61,7 +63,8 @@ const Item = (props: { secret: StoreSecret }) => {
             {value()}
           </div>
           <div class="d-flex align-items-center gap-3">
-            <button class="btn btn-primary btn-sm fw-semibold" onClick={() => {
+            <button class="btn btn-primary btn-sm fw-semibold" disabled={copied()} onClick={() => {
+              navigator.clipboard.writeText(value())
               setCopied(true);
               if (copiedDeb) {
                 clearTimeout(copiedDeb);
@@ -72,8 +75,19 @@ const Item = (props: { secret: StoreSecret }) => {
             }}>
               {copied() ? "Copied" : "Copy"}
             </button>
-            <button class="btn btn-danger btn-sm fw-semibold" onClick={() => deleteSecret(props.secret.id || "")}>
-              Delete
+            <button class="btn btn-danger btn-sm fw-semibold" onClick={() => {
+              if (deleted()) {
+                deleteSecret(props.secret.id || "")
+              }
+              setDeleted(true);
+              if (deletedDeb) {
+                clearTimeout(deletedDeb);
+              }
+              deletedDeb = setTimeout(() => {
+                setDeleted(false);
+              }, 1000);
+            }}>
+              {deleted() ? "Confirm?" : "Delete"}
             </button>
           </div>
         </div>
