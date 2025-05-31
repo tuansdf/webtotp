@@ -1,6 +1,6 @@
 import { createStore } from "solid-js/store";
 
-const StorageKey = "secrets";
+const STORAGE_KEY = "secrets";
 
 export type StoreSecret = {
   id?: string;
@@ -14,7 +14,7 @@ type Store = {
 
 const getSecretsFromStorage = () => {
   try {
-    const secrets = localStorage.getItem(StorageKey);
+    const secrets = localStorage.getItem(STORAGE_KEY);
     if (!secrets) return [];
     return JSON.parse(secrets) as StoreSecret[];
   } catch (e) {
@@ -28,7 +28,7 @@ export const [store, setStore] = createStore<Store>({
 
 export const setSecrets = (input: StoreSecret[]) => {
   try {
-    localStorage.setItem(StorageKey, JSON.stringify(input));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(input));
   } catch {}
   setStore("secrets", input);
 };
@@ -40,6 +40,5 @@ export const addSecret = (input: StoreSecret) => {
 
 export const deleteSecret = (id: string) => {
   const result = store.secrets.filter((item) => item.id !== id);
-  console.log(result)
   setSecrets(result);
 };

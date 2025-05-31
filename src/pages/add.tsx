@@ -1,4 +1,4 @@
-import { addSecret } from "@/stores/main.store.ts";
+import { addSecret } from "@/store.ts";
 import { A, useNavigate } from "@solidjs/router";
 import { nanoid } from "nanoid";
 import { createSignal } from "solid-js";

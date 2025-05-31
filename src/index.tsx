@@ -1,5 +1,5 @@
 /* @refresh reload */
-import "@/styles";
+import "@/globals.scss";
 import App from "@/app.tsx";
 import { render } from "solid-js/web";
 

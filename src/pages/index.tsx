@@ -1,4 +1,4 @@
-import { deleteSecret, store, StoreSecret } from "@/stores/main.store.ts";
+import { deleteSecret, store, StoreSecret } from "@/store.ts";
 import { A } from "@solidjs/router";
 import { TOTP, URI } from "otpauth";
 import { createSignal, For, onCleanup } from "solid-js";
