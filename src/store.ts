@@ -1,6 +1,7 @@
+import { decryptText, encryptText, hashPassword } from "@/crypto.js";
 import { createStore } from "solid-js/store";
 
-const STORAGE_KEY = "secrets";
+const STORAGE_KEY = "store";
 
 export type StoreSecret = {
   id?: string;
@@ -10,35 +11,52 @@ export type StoreSecret = {
 
 type Store = {
   secrets: StoreSecret[];
+  password: string;
 };
 
-const getSecretsFromStorage = () => {
+const getRawFromStorage = () => {
   try {
-    const secrets = localStorage.getItem(STORAGE_KEY);
-    if (!secrets) return [];
-    return JSON.parse(secrets) as StoreSecret[];
+    return localStorage.getItem(STORAGE_KEY);
   } catch (e) {
-    return [];
+    return null;
   }
 };
 
 export const [store, setStore] = createStore<Store>({
-  secrets: getSecretsFromStorage(),
+  secrets: [],
+  password: "",
 });
 
-export const setSecrets = (input: StoreSecret[]) => {
+export const setSecrets = async (input: StoreSecret[]) => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(input));
+    localStorage.setItem(STORAGE_KEY, await encryptText(JSON.stringify(input), store.password));
   } catch {}
   setStore("secrets", input);
 };
 
-export const addSecret = (input: StoreSecret) => {
+export const addSecret = async (input: StoreSecret) => {
   const result = [...store.secrets, input];
-  setSecrets(result);
+  await setSecrets(result);
 };
 
-export const deleteSecret = (id: string) => {
+export const deleteSecret = async (id: string) => {
   const result = store.secrets.filter((item) => item.id !== id);
-  setSecrets(result);
+  await setSecrets(result);
+};
+
+export const decryptSecrets = async (password: string): Promise<boolean> => {
+  try {
+    const hashed = await hashPassword(password);
+    if (!getRawFromStorage()) {
+      setStore("password", hashed);
+      return true;
+    }
+    const result = await decryptText(getRawFromStorage() || "", hashed);
+    if (!result) return false;
+    setStore("password", hashed);
+    setStore("secrets", JSON.parse(result));
+    return true;
+  } catch (e) {
+    return false;
+  }
 };
