@@ -1,4 +1,4 @@
-import { deleteSecret, store, StoreSecret } from "@/store.ts";
+import { deleteSecret, secrets, StoreSecret } from "@/store.ts";
 import { A } from "@solidjs/router";
 import { TOTP, URI } from "otpauth";
 import { createSignal, For, onCleanup } from "solid-js";
@@ -13,7 +13,7 @@ export default function IndexPage() {
           <A href="/add">Add</A>
         </div>
       </header>
-      <For each={store.secrets}>
+      <For each={secrets()}>
         {(secret) => {
           return <Item secret={secret} />;
         }}

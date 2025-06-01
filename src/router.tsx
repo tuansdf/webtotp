@@ -1,14 +1,15 @@
+import AddPage from "@/pages/add.js";
+import IndexPage from "@/pages/index.js";
 import { Navigate, Router as ARouter } from "@solidjs/router";
-import { lazy } from "solid-js";
 
 const routes = [
   {
     path: "/",
-    component: lazy(() => import("@/pages/index.tsx")),
+    component: IndexPage,
   },
   {
     path: "/add",
-    component: lazy(() => import("@/pages/add.tsx")),
+    component: AddPage,
   },
   {
     path: "/*",

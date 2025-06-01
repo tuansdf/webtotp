@@ -1,5 +1,5 @@
 import { Router } from "@/router.tsx";
-import { decryptSecrets, store } from "@/store.js";
+import { decryptSecrets, ok } from "@/store.js";
 import { createSignal, Match, Show, Switch } from "solid-js";
 
 export default function App() {
@@ -11,7 +11,7 @@ export default function App() {
     <>
       <main class="main">
         <Switch>
-          <Match when={!store.password}>
+          <Match when={!ok()}>
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
