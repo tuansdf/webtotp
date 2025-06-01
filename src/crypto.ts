@@ -12,7 +12,6 @@ const SALT_LENGTH = 32;
 export const SALT_HEX_LENGTH = SALT_LENGTH * 2;
 
 export const encryptText = async (contentStr: string, password64: string): Promise<string> => {
-  const start = performance.now();
   try {
     const password = base64Decode(password64);
     const cipher = encryptFn(password);
@@ -21,13 +20,10 @@ export const encryptText = async (contentStr: string, password64: string): Promi
     return base64Encode(encrypted);
   } catch (e) {
     return "";
-  } finally {
-    console.info("EPERF: " + (performance.now() - start) + " ms");
   }
 };
 
 export const decryptText = async (content64: string, password64: string): Promise<string> => {
-  const start = performance.now();
   try {
     const content = base64Decode(content64);
     const password = base64Decode(password64);
@@ -35,8 +31,6 @@ export const decryptText = async (content64: string, password64: string): Promis
     return Pako.inflate(cipher.decrypt(content), { to: "string" });
   } catch (e) {
     return "";
-  } finally {
-    console.info("DPERF: " + (performance.now() - start) + " ms");
   }
 };
 
